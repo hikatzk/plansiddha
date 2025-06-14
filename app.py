@@ -11,25 +11,24 @@ from dotenv import load_dotenv
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 
 # ==== 設定 ====
-VERSION = "ver.0.2.0"
+VERSION = "ver.0.3.0"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ==== Streamlitページ構成 ====
 st.set_page_config(layout="wide")
 st.title(f"🕉️ PlanSiddha | {VERSION}")
-mode = st.sidebar.radio("モード選択", ["照射設計チャット", "副作用予測"])
 top_message = st.empty()  # 成功メッセージなどを画面上部に出す用
 
 # ==== GPT通信関数 ====
-def send_to_gpt(case_data, message="GPT-4oに送信中…"):
+def send_to_gpt(case_data, mode="overview"):
     """症例データをGPTへ送信し、フィードバックを取得する。"""
-    with st.spinner(message):
+    with st.spinner("GPT-4oに送信中…"):
         with st.expander("📤 送信内容（確認用）", expanded=False):
             st.json(case_data)
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": build_prompt(case_data)}
+            {"role": "user", "content": build_prompt(case_data, mode=mode)}
         ]
         response = client.chat.completions.create(model="gpt-4o", messages=messages)
     top_message.success(f"✅ GPTからのコメントがありました。")
@@ -61,23 +60,18 @@ def render_plan_form():
             case_data["dose_plan"] = st.text_input("処方線量、線量分割", placeholder="例：70Gy/35Fr、D50処方")
             case_data["question"] = st.text_area("気になる点・議論したいこと", height=200, placeholder="例：CTVの範囲が妥当か、Boost必要か？")
             case_data["irradiation_technique"] = st.radio("照射方法", ["3D-CRT", "IMRT", "SRT", "その他"], horizontal=False)
+            case_data["gpt_mode"] = st.radio("GPTに聞きたいことは？", ["背景の整理", "照射設計の検討", "副作用・経過予測"], index=0, horizontal=True)
             submitted = st.form_submit_button("GPTに送信")
 
     gpt_feedback = ""
     if submitted:
-        gpt_feedback = send_to_gpt(case_data)
+        mode_map = {"背景の整理": "overview", "照射設計の検討": "design", "副作用・経過予測": "toxicity"}
+        gpt_mode = mode_map.get(case_data["gpt_mode"], "overview")
+        st.session_state["gpt_feedback"] = send_to_gpt(case_data, mode=gpt_mode)
 
     # ▶️ 右：GPT応答
     with col3:
         st.subheader("💬 GPTからのコメント")
-        st.markdown(gpt_feedback, unsafe_allow_html=False)
+        st.markdown(st.session_state.get("gpt_feedback", "ここにコメントが表示されます"), unsafe_allow_html=False)
 
-# ==== 副作用予測フォーム ====
-def render_toxicity_form():
-    st.subheader("🧠 副作用予測（準備中）")
-    st.info("このモードは現在開発中です。")
-
-if mode == "照射設計チャット":
-    render_plan_form()
-elif mode == "副作用予測":
-    render_toxicity_form()
+render_plan_form()
