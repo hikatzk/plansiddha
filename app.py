@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 
 # ==== 設定 ====
-VERSION = "ver.0.4.0"
+VERSION = "0.5.0"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -20,7 +20,8 @@ mode_labels = {"overview": "症例背景の整理", "design": "照射設計の�
 
 # ==== Streamlitページ構成 ====
 st.set_page_config(layout="wide")
-st.title(f"🕉️ PlanSiddha | {VERSION}")
+st.title(f"PlanSiddha | {VERSION}")
+st.caption(f"ver. {VERSION}")
 top_message = st.empty()  # 成功メッセージなどを画面上部に出す用
 
 # ==== GPT通信関数 ====
@@ -45,7 +46,7 @@ def render_plan_form():
 
         # ◀️ 左：症例背景（S/O）
         with col1:
-            st.subheader("🧍‍♂️ 症例情報")
+            st.subheader("📝 症例情報")
             case_data = {}
             case_data["age"] = st.number_input("年齢", min_value=0, max_value=129, step=1)
             case_data["sex"] = st.radio("性別", ["男性", "女性"], horizontal=True)
@@ -72,8 +73,13 @@ def render_plan_form():
 
     # ▶️ 右：GPT応答
     with col3:
-        selected_mode = st.session_state.get("gpt_mode", "design")
-        st.subheader(f"💬 GPTからのコメント（{mode_labels.get(selected_mode, '検討')}）")
-        st.markdown(st.session_state.get("gpt_feedback", "ここにコメントが表示されます"), unsafe_allow_html=False)
+        feedback = st.session_state.get("gpt_feedback")
+        if feedback:
+            selected_mode = st.session_state.get("gpt_mode", "design")
+            st.subheader(f"💬 GPTからのコメント（{mode_labels.get(selected_mode, '検討')}）")
+            st.markdown(feedback, unsafe_allow_html=False)
+        else:
+            st.subheader("💬 GPTからのコメント")
+            st.markdown("ここにコメントが表示されます", unsafe_allow_html=False)
 
 render_plan_form()
