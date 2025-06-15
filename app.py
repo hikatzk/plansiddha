@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 
 # ==== 設定 ====
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -83,3 +83,5 @@ def render_plan_form():
             st.markdown("ここにコメントが表示されます", unsafe_allow_html=False)
 
 render_plan_form()
+
+# EOF
