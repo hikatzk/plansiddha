@@ -9,9 +9,10 @@ from dotenv import load_dotenv
 
 # ==== 自作モジュール ====
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
+from ui.eqd2_inputs import render_eqd2_form
 
 # ==== 設定 ====
-VERSION = "0.5.4"
+VERSION = "0.6.0"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -19,9 +20,10 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 mode_labels = {"overview": "症例背景の整理", "design": "照射設計の検討", "toxicity": "副作用・予後の予測"}
 
 # ==== Streamlitページ構成 ====
-st.set_page_config(page_title=f"PlanSiddha {VERSION}", page_icon="🕉️", layout="wide")
+st.set_page_config(page_title=f"PlanSiddha | {VERSION}", page_icon="🕉️", layout="wide")
 st.title(f"PlanSiddha")
 st.caption(f"ver. {VERSION}")
+app_mode = st.sidebar.radio("モード選択", ["照射設計チャット", "再照射支援", "その他モード"])
 top_message = st.empty()  # 成功メッセージなどを画面上部に出す用
 
 # ==== GPT通信関数 ====
@@ -64,7 +66,7 @@ def render_plan_form():
             case_data["dose_plan"] = st.text_input("処方線量、線量分割", placeholder="例：70Gy/35Fr、D50処方")
             case_data["question"] = st.text_area("気になる点・議論したいこと", height=200, placeholder="例：CTVの範囲が妥当か、Boost必要か？")
             case_data["irradiation_technique"] = st.radio("照射方法", ["3D-CRT", "IMRT", "SRT", "その他"], horizontal=False)
-            case_data["gpt_mode"] = st.radio("GPTに聞きたいことは？", ["overview", "design", "toxicity"], format_func=lambda x: mode_labels.get(x, x), horizontal=True)
+            case_data["gpt_mode"] = st.radio("GPTに聞きたいことは？", ["overview", "design", "toxicity"], format_func=lambda x: mode_labels.get(x, x), horizontal=False)
             st.session_state["gpt_mode"] = case_data["gpt_mode"] 
             submitted = st.form_submit_button("GPTに送信")
 
@@ -82,6 +84,9 @@ def render_plan_form():
             st.subheader("💬 GPTからのコメント")
             st.markdown("ここにコメントが表示されます", unsafe_allow_html=False)
 
-render_plan_form()
-
-# EOF
+if app_mode == "照射設計チャット":
+    render_plan_form()
+elif app_mode == "再照射支援":
+    render_eqd2_form()
+else:
+    st.info("今後のモードをここに追加していく予定です。")
