@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 
 # ==== 設定 ====
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -19,8 +19,9 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 mode_labels = {"overview": "症例背景の整理", "design": "照射設計の検討", "toxicity": "副作用・予後の予測"}
 
 # ==== Streamlitページ構成 ====
+st.set_page_config(page_title="PlanSiddha {VERSION}", page_icon="🕉️")
 st.set_page_config(layout="wide")
-st.title(f"PlanSiddha | {VERSION}")
+st.title(f"PlanSiddha")
 st.caption(f"ver. {VERSION}")
 top_message = st.empty()  # 成功メッセージなどを画面上部に出す用
 
@@ -42,7 +43,7 @@ def send_to_gpt(case_data, mode="overview"):
 def render_plan_form():
     """照射設計を入力し、GPTに議論を依頼するフォーム。"""
     with st.form("plan_form"):
-        col1, col2, col3 = st.columns([1, 2, 2])
+        col1, col2, col3 = st.columns([2, 3, 3])
 
         # ◀️ 左：症例背景（S/O）
         with col1:
