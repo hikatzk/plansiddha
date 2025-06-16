@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 
 # ==== 設定 ====
-VERSION = "0.5.3"
+VERSION = "0.5.4"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -19,7 +19,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 mode_labels = {"overview": "症例背景の整理", "design": "照射設計の検討", "toxicity": "副作用・予後の予測"}
 
 # ==== Streamlitページ構成 ====
-st.set_page_config(page_title="PlanSiddha {VERSION}", page_icon="🕉️", layout="wide")
+st.set_page_config(page_title=f"PlanSiddha {VERSION}", page_icon="🕉️", layout="wide")
 st.title(f"PlanSiddha")
 st.caption(f"ver. {VERSION}")
 top_message = st.empty()  # 成功メッセージなどを画面上部に出す用
