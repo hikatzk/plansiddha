@@ -1,4 +1,4 @@
-# ui/eqd2_inputs.py
+# ui/eqd2_form.py
 
 # ==== 標準ライブラリ ====
 import json
