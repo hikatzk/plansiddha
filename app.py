@@ -8,11 +8,11 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 # ==== 自作モジュール ====
-from gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
+from prompts.gpt_prompt import system_prompt, build_prompt  # GPTのプロンプト定義
 from ui.eqd2_inputs import render_eqd2_form
 
 # ==== 設定 ====
-VERSION = "0.6.0"
+VERSION = "0.8.0"
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -50,7 +50,7 @@ def render_plan_form():
         with col1:
             st.subheader("📝 症例情報")
             case_data = {}
-            case_data["age"] = st.number_input("年齢", min_value=0, max_value=129, step=1)
+            case_data["age"] = st.number_input("年齢", min_value=0, max_value=129, value=60, step=1)
             case_data["sex"] = st.radio("性別", ["男性", "女性"], horizontal=True)
             case_data["disease"] = st.text_input("疾患名", placeholder="例：中咽頭癌")
             case_data["staging"] = st.text_input("病期", placeholder="例：cT2N1M0")            
@@ -61,9 +61,9 @@ def render_plan_form():
 
         # ◀️ 中央：治療設計（A/P）
         with col2:
-            st.subheader("📐 照射設計案")
+            st.subheader("📐 照射計画")
             case_data["target_plan"] = st.text_area("ターゲット設計", height=200, placeholder="例：\n左舌根部原発、左II領域LN転移。\n予防域を含む両側全頚部照射")
-            case_data["dose_plan"] = st.text_input("処方線量、線量分割", placeholder="例：70Gy/35Fr、D50処方")
+            case_data["dose_plan"] = st.text_input("処方線量、線量分割", placeholder="例：70Gy/35Fr")
             case_data["question"] = st.text_area("気になる点・議論したいこと", height=200, placeholder="例：CTVの範囲が妥当か、Boost必要か？")
             case_data["irradiation_technique"] = st.radio("照射方法", ["3D-CRT", "IMRT", "SRT", "その他"], horizontal=False)
             case_data["gpt_mode"] = st.radio("GPTに聞きたいことは？", ["overview", "design", "toxicity"], format_func=lambda x: mode_labels.get(x, x), horizontal=False)

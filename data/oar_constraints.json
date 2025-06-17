@@ -1,0 +1,72 @@
+{
+     "Brain": {
+        "label": "脳", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 60.0
+},
+    "Brainstem": {
+        "label": "脳幹", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 54.0
+    },
+    "SpinalCord": {
+        "label": "脊髄", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 50.0
+    },
+    "CaudaEquina": {
+        "label": "馬尾", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 60.0
+    },
+    "Lens": {
+        "label": "水晶体", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 6.0
+    },
+    "OpticNerve": {
+        "label": "視神経", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 55.0
+    },
+    "OpticChiasm": {
+        "label": "視交叉", 
+        "alpha_beta": 2.0, 
+        "eqd2_limit": 54.0
+    },
+    "Lung": {
+        "label": "肺", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 66.0
+    },
+    "Heart": {
+        "label": "心臓", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 60.0
+    },
+    "Liver": {
+        "label": "肝臓", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 30.0
+    },
+    "Kidney": {
+        "label": "腎臓", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 23.0
+    },
+    "Bladder": {
+        "label": "膀胱", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 65.0
+    },
+    "Bowel": {
+        "label": "腸管", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 60.0
+    },
+    "Rectum": {
+        "label": "直腸", 
+        "alpha_beta": 3.0, 
+        "eqd2_limit": 65.0
+    }
+}
