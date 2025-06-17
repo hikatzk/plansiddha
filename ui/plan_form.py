@@ -5,10 +5,9 @@ import streamlit as st
 
 # ==== 自作モジュール ====
 from core.gpt_client import send_to_gpt
-from prompts.gpt_prompt import mode_labels
 
 # ==== プラン検討フォーム ====
-def render_plan_form(top_message):
+def render_plan_form(mode_labels, top_message):
     """照射設計を入力し、GPTに議論を依頼するフォーム。"""
     with st.form("plan_form"):
         col1, col2, col3 = st.columns([2, 3, 3])

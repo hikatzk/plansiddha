@@ -69,10 +69,3 @@ def build_prompt(case_data, mode="design"):
 - 必要なタイミング、観察内容  
 - ガイドライン等の引用があれば歓迎  
 """
-    
-# ==== GPT応答モードのラベル定義 ====
-mode_labels = {
-    "overview": "症例背景の整理",
-    "design": "照射設計の検討",
-    "toxicity": "副作用・予後の予測"
-}
